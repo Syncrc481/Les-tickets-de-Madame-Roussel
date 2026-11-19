@@ -97,7 +97,8 @@ export function afficherJours(jours) {
   select.replaceChildren(creer("option", "", "Choisir un jour"));
   select.firstChild.value = "";
   jours.forEach((jour) => {
-    const option = creer("option", "", formaterDate(new Date(jour)));
+    const [annee, mois, date] = jour.split("-").map(Number);
+    const option = creer("option", "", formaterDate(new Date(annee, mois - 1, date)));
     option.value = jour;
     select.append(option);
   });
