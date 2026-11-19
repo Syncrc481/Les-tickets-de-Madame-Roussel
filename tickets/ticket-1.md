@@ -12,6 +12,8 @@ Tu m’aides à trouver la cause d’un bug sur la page de Madame Roussel.
 <symptome>Le code promo ne fonctionne pas sur téléphone d'après la cliente.</symptome>
 <attendu>Le code de promotion doit fonctionner partout.</attendu>
 
+Complément ajouté après le diagnostic : étapes = ajouter un bouquet puis comparer `NOEL10` et `noel10` ; code concerné = `js/promo.js`, `js/app.js`, `data/promos.json`.
+
 ### Réponse de l'IA
 
 L'hypothèse principale est une différence de saisie : la comparaison distinguait les majuscules des minuscules. Un espace ajouté au début ou à la fin du code pouvait également provoquer le refus. Une version différente du site chargée depuis le cache du téléphone était une troisième piste, moins probable.
@@ -25,10 +27,22 @@ L'hypothèse principale est une différence de saisie : la comparaison distingua
 
 ## Cause et correctif
 
+Hypothèses retenues : différence de casse et espaces, car le test de l'ancienne fonction refusait ces variantes. Le cache reste une piste non vérifiée, et non une cause confirmée.
+
 Dans `js/promo.js`, le code était comparé exactement à la saisie. La recherche utilise maintenant `saisie.trim().toUpperCase()` : les espaces au début et à la fin sont retirés et les lettres sont converties en majuscules avant la comparaison.
 
 ## Vérification
 
+Test relancé sur le code corrigé : appels de `appliquerPromo()` avec un montant de 50 € et les saisies `NOEL10`, `Noel10`, `noel10` et ` NOEL10 ` ; chacune renvoie une remise de 5 €. Il s'agit d'un test du module JavaScript, pas d'un test du clavier mobile.
+
 Avant la correction, un test direct du JavaScript a montré que `NOEL10` était accepté, tandis que `Noel10`, `noel10` et `NOEL10` suivi d'un espace étaient refusés. Le code exact a aussi été observé comme accepté dans Chrome, avec un panier vide. La fiche initiale indique qu'une nouvelle vérification a été effectuée après modification.
 
-La saisie exacte de la cliente n'est pas connue ; le parcours complet après correction reste à vérifier dans un navigateur avec un bouquet dans le panier, notamment sur téléphone.
+La saisie exacte de la cliente n'est pas connue.
+
+## Proposition modifiée et raison
+
+La première proposition de correction ne convertissait que les minuscules. Elle a été complétée avec `trim()` après constat que les espaces provoquaient aussi un refus.
+
+## Réponse à la cliente proposée
+
+Bonjour Madame, le code pouvait être refusé si une lettre était en minuscule ou si un espace s'était ajouté. La correction accepte désormais ces deux situations. Nous devons encore vérifier le parcours complet sur téléphone. Merci de nous avoir signalé ce problème.

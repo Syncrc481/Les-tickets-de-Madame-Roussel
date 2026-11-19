@@ -1,4 +1,4 @@
-com# Ticket 3 : le bouquet absent du filtre Merci
+﻿# Ticket 3 : le bouquet absent du filtre Merci
 
 Bonjour, quand on choisit l’occasion « Merci », le bouquet « Le petit mot » n’apparaît pas. C’est pourtant celui que je vends le plus pour dire merci ! Il est bien là quand on affiche tous les bouquets.
 
@@ -11,6 +11,8 @@ Tu m’aides à trouver la cause d’un bug sur la page de Madame Roussel.
 
 <symptome>Quand on filtre en sélectionnant « Merci », le bouquet « Le petit mot » n'apparaît pas.</symptome>
 <attendu>Le bouquet « Le petit mot » doit apparaître dans la liste des occasions « Merci ».</attendu>
+
+Complément ajouté après le diagnostic : étapes = afficher tous les bouquets puis sélectionner « Merci » ; code concerné = `data/catalogue.json`, `js/affichage.js`.
 
 ### Réponse de l'IA
 
@@ -25,8 +27,20 @@ L'hypothèse principale est une différence de majuscule et de minuscule dans le
 
 ## Cause et changement constaté
 
+Pour reproduire avant correction : sélectionner « Toutes » et constater que « Le petit mot » est présent, puis sélectionner « Merci » et observer son absence. L'hypothèse de casse a été retenue après comparaison des valeurs dans les fichiers ; aucun test navigateur de cette hypothèse n'a été observé ici.
+
 L'examen initial du fichier confirmait la différence entre `"Merci"` et `"merci"`. Depuis, `data/catalogue.json` a été modifié : l'occasion du bouquet est désormais `"merci"`, comme l'identifiant du filtre. Ce changement existait déjà au moment de remplir cette fiche.
 
-## Vérification à effectuer
+## Vérification
 
-Recharger la boutique dans le navigateur, sélectionner « Merci » et vérifier que « Le petit mot » apparaît. Tester aussi « Toutes » et « Pour le plaisir ». Le résultat de cette vérification n'a pas encore été constaté ici.
+Test relancé sur les données actuelles : la liste des occasions de `petit-mot` contient `merci` et `plaisir`. Ce contrôle des données ne vérifie pas à lui seul l'interface du filtre.
+
+
+
+## Proposition de l'IA écartée ou modifiée
+
+Aucune proposition distincte n'a été écartée ou modifiée dans les échanges disponibles ; en ajouter une comme si elle avait été discutée serait inexact.
+
+## Réponse à la cliente proposée
+
+Bonjour Madame, le bouquet n'était pas associé correctement à l'occasion « Merci ». Cette association a été corrigée dans le catalogue. Merci de nous l'avoir signalé.

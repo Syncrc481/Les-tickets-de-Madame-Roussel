@@ -9,4 +9,3 @@ Tu m’aides à trouver la cause d’un bug sur la page de Madame Roussel.
 <symptome>[Décrire ce qui se passe et, si possible, le message affiché.]</symptome>
 <etapes>[Indiquer les actions et les données nécessaires pour reproduire le problème.]</etapes>
 <attendu>[Décrire le comportement attendu.]</attendu>
-<code_concerne>[Indiquer les fichiers ou fonctions pertinents, s'ils sont connus.]</code_concerne>

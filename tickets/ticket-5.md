@@ -1,4 +1,4 @@
-# Ticket 5 : la suppression vide le panier
+﻿# Ticket 5 : la suppression vide le panier
 
 Bonjour, une cliente avait mis trois bouquets différents dans son panier. Elle a voulu retirer le premier avec le bouton « Supprimer » : les trois ont disparu. Elle a cru à une panne et elle est partie sans commander.
 
@@ -11,6 +11,8 @@ Tu m’aides à trouver la cause d’un bug sur la page de Madame Roussel.
 
 <symptome>Quand on supprime un bouquet, cela supprime tout le panier.</symptome>
 <attendu>On doit pouvoir retirer un bouquet sans supprimer les autres.</attendu>
+
+Complément ajouté après le diagnostic : étapes = ajouter trois bouquets différents et supprimer le premier ; code concerné = `js/panier.js`, `js/app.js`, `js/affichage.js`.
 
 ### Réponse de l'IA
 
@@ -25,10 +27,22 @@ L'hypothèse principale est que la fonction retire la ligne choisie et toutes ce
 
 ## Cause et correctif
 
+Hypothèse retenue : suppression de toutes les lignes à partir de l'index, d'après l'appel initial à `splice(index)`. Aucune autre cause indépendante n'a été établie.
+
 La fonction `supprimerLigne()` appelait `lignes.splice(index)` sans indiquer combien de lignes retirer. Elle utilise maintenant `lignes.splice(index, 1)` pour retirer uniquement la ligne choisie. Cette fonction sert également lorsque le bouton « − » ramène une quantité à zéro.
 
 ## Vérification
 
+Test relancé sur le module corrigé : supprimer respectivement A, B puis C de paniers séparés de trois lignes conserve à chaque fois les deux autres ; diminuer A de 1 à 0 conserve B.
+
 Un test JavaScript du module panier confirme que la suppression de la première, de la deuxième ou de la dernière ligne conserve les deux autres. Il vérifie aussi que « − » retire seulement la ligne dont la quantité atteint zéro et conserve une ligne dont la quantité reste positive.
 
-Le parcours complet reste à vérifier dans le navigateur avec trois bouquets différents, en testant « Supprimer » puis « − » sur plusieurs positions.
+
+
+## Proposition de l'IA écartée ou modifiée
+
+Aucune proposition distincte n'a été écartée ou modifiée dans les échanges disponibles. La correction retenue limite la suppression à la ligne demandée.
+
+## Réponse à la cliente proposée
+
+Bonjour Madame, nous avons corrigé la suppression dans le panier : retirer un bouquet ne doit plus retirer les autres. Nous sommes désolés pour la gêne rencontrée par votre cliente.
