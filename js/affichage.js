@@ -39,7 +39,7 @@ function decrireOptions(options) {
 }
 
 // Affiche les lignes du panier avec leurs boutons.
-export function afficherPanier(lignes, surAction) {
+export function afficherPanier(lignes) {
   const liste = document.querySelector("#panier-liste");
   liste.replaceChildren();
   document.querySelector("#panier-vide").hidden = lignes.length > 0;
@@ -65,7 +65,11 @@ export function afficherPanier(lignes, surAction) {
     liste.append(element);
   });
 
-  // Les boutons + , − et Supprimer de toutes les lignes.
+}
+
+// Installe une seule fois les actions des boutons du panier.
+export function preparerActionsPanier(surAction) {
+  const liste = document.querySelector("#panier-liste");
   liste.addEventListener("click", (evenement) => {
     const cible = evenement.target.closest("button[data-action]");
     if (!cible) return;

@@ -36,8 +36,8 @@ La cause la plus probable est une différence de saisie. Le site compare le code
 Les deux premières situations ont été reproduites en testant directement le JavaScript, mais pas encore dans un navigateur mobile. Elles restent compatibles avec le témoignage de la cliente, sans prouver ce qu’elle a saisi. Aucun correctif n’a été appliqué.
 
 
-- je garde l'hypothese 1 et je regarde comment regler le probleme
-Il suffis de remplacer dans promo.js cette ligne de commande 
+- je garde l'hypothese 1 et je regarde comment "regler" le probleme
+Je vois qu'il suffit de remplacer dans promo.js cette ligne de commande 
 ```  
 const regle = promos.find((promo) => promo.code === saisie);
 ```
