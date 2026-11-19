@@ -1,51 +1,34 @@
-# Ticket 1 : le code promo refusé
+﻿# Ticket 1 : le code promo refusé
 
-Bonjour, une cliente m’a appelée hier. Elle a voulu utiliser le code NOEL10 de ma lettre d’information
-depuis son téléphone, et le site lui a répondu que ce code n’existe pas. Sur mon ordinateur, le code
-marche très bien. Elle a fini par commander sans la réduction et elle n’était pas contente. Pouvez-vous
-regarder ?
+Bonjour, une cliente m’a appelée hier. Elle a voulu utiliser le code NOEL10 de ma lettre d’information depuis son téléphone, et le site lui a répondu que ce code n’existe pas. Sur mon ordinateur, le code marche très bien. Elle a fini par commander sans la réduction et elle n’était pas contente. Pouvez-vous regarder ?
 
-- J'essaye de reproduire le bug, mais je n'arrive pas a le reproduire 
-- Je demande a l'IA d'essayer de reproduire le bug
+## Prompt envoyé à l'IA
 
-## Prompt envoyer a l'IA
+Tu m’aides à trouver la cause d’un bug sur la page de Madame Roussel.
+1. Propose trois hypothèses au plus, classées.
+2. Pour chacune : comment la vérifier dans le navigateur.
+3. Aucun correctif à ce stade.
 
-Tu m’aides à trouver la cause d’un bug sur la page
-de Madame Roussel.
-Propose trois hypothèses au plus, classées.
-Pour chacune : comment la vérifier dans
-le navigateur.
-Aucun correctif à ce stade.
-<symptome>Le code promo ne fonctionne pas sur telephone d'apres la cliente
-</symptome>
-<attendu>que le code de promotion fonctionne partout</attendu> 
+<symptome>Le code promo ne fonctionne pas sur téléphone d'après la cliente.</symptome>
+<attendu>Le code de promotion doit fonctionner partout.</attendu>
 
-### Reponse de l'ia :
+### Réponse de l'IA
 
-La cause la plus probable est une différence de saisie. Le site compare le code exactement : il distingue les majuscules et prend en compte les espaces. Les hypothèses suivantes sont classées selon les tests déjà effectués sur le JavaScript.
+L'hypothèse principale est une différence de saisie : la comparaison distinguait les majuscules des minuscules. Un espace ajouté au début ou à la fin du code pouvait également provoquer le refus. Une version différente du site chargée depuis le cache du téléphone était une troisième piste, moins probable.
 
-1. Le clavier du téléphone saisit des minuscules.
-   Dans le navigateur sur téléphone, ajoutez un bouquet au panier, puis essayez NOEL10 et Noel10. Si le premier est accepté et le second refusé, la différence de casse explique ce refus.
+### Vérification proposée dans le navigateur
 
-2. Un espace est ajouté au code, par exemple lors du copier-coller depuis la lettre d’information.
-   Dans le navigateur, comparez NOEL10 avec le même code suivi d’un espace. Essayez aussi de copier le code directement depuis la lettre. Si seule la saisie avec espace est refusée, cette hypothèse est confirmée pour ce test.
+1. Ajouter un bouquet au panier et saisir `NOEL10`, puis vérifier que la remise apparaît.
+2. Essayer `Noel10` et `noel10` pour vérifier si les minuscules sont acceptées.
+3. Essayer le code avec un espace avant ou après, puis reproduire le copier-coller depuis la lettre d'information.
+4. Si le code exact échoue aussi, recharger la page et comparer avec un autre navigateur, puis vérifier les fichiers et leur provenance dans l'onglet Réseau.
 
-3. Le téléphone charge une version différente du site, par exemple depuis son cache.
-   Si NOEL10 saisi exactement échoue aussi, rechargez la page et réessayez, puis comparez avec un autre navigateur sur le téléphone. Si le résultat change, examinez dans les outils de développement l’onglet Réseau pour voir quels fichiers sont chargés et s’ils viennent du cache.
+## Cause et correctif
 
-Les deux premières situations ont été reproduites en testant directement le JavaScript, mais pas encore dans un navigateur mobile. Elles restent compatibles avec le témoignage de la cliente, sans prouver ce qu’elle a saisi. Aucun correctif n’a été appliqué.
+Dans `js/promo.js`, le code était comparé exactement à la saisie. La recherche utilise maintenant `saisie.trim().toUpperCase()` : les espaces au début et à la fin sont retirés et les lettres sont converties en majuscules avant la comparaison.
 
+## Vérification
 
-- je garde l'hypothese 1 et je regarde comment "regler" le probleme
-Je vois qu'il suffit de remplacer dans promo.js cette ligne de commande 
-```  
-const regle = promos.find((promo) => promo.code === saisie);
-```
+Avant la correction, un test direct du JavaScript a montré que `NOEL10` était accepté, tandis que `Noel10`, `noel10` et `NOEL10` suivi d'un espace étaient refusés. Le code exact a aussi été observé comme accepté dans Chrome, avec un panier vide. La fiche initiale indique qu'une nouvelle vérification a été effectuée après modification.
 
-par 
-
-```
-const regle = promos.find((promo) => promo.code === saisie .trim() .toUpperCase())
-```
-
-apres avoir changer cette ligne de commande et apres reverification tout fonctionne correctement
+La saisie exacte de la cliente n'est pas connue ; le parcours complet après correction reste à vérifier dans un navigateur avec un bouquet dans le panier, notamment sur téléphone.
