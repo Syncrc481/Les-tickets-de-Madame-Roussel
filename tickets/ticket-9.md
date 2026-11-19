@@ -2,6 +2,13 @@
 
 Madame Roussel ne livre pas le dimanche. Pourtant, un client commandant le samedi soir a vu un dimanche proposé et aucun samedi dans la liste.
 
+## Prompt de diagnostic reconstitué
+
+Tu m’aides à trouver la cause d’un bug sur la page de Madame Roussel. Propose trois hypothèses au plus, classées. Pour chacune, indique comment la vérifier dans le navigateur. Aucun correctif à ce stade.
+
+<symptome>Une commande passée le samedi soir propose une livraison le dimanche et aucun samedi.</symptome>
+<attendu>Les jours proposés doivent correspondre aux dates disponibles et exclure le dimanche, jour de fermeture.</attendu>
+
 ## Diagnostic
 
 Les dates locales étaient converties en UTC avec `toISOString()`. À Paris, minuit local peut correspondre à la veille en UTC : une date de lundi pouvait ainsi être enregistrée comme dimanche, et un samedi comme vendredi. Pour reproduire le problème dans le navigateur, ouvrir la boutique avec `?maintenant=2026-11-14T19:30`, puis comparer les dates proposées à un calendrier.

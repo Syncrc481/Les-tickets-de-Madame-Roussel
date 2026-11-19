@@ -2,6 +2,13 @@
 
 Une cliente qui utilisait l'ancienne version voit « NaN € » dans son panier et ne peut plus commander. Les autres clientes ne semblent pas touchées.
 
+## Prompt de diagnostic reconstitué
+
+Tu m’aides à trouver la cause d’un bug sur la page de Madame Roussel. Propose trois hypothèses au plus, classées. Pour chacune, indique comment la vérifier dans le navigateur. Aucun correctif à ce stade.
+
+<symptome>Une cliente qui commandait avant la nouvelle version voit « NaN € » dans son panier et ne peut plus commander ; les autres clientes ne semblent pas concernées.</symptome>
+<attendu>Le panier doit afficher des prix valides et permettre de commander. Les paniers de la version 1 ne sont pas repris en version 2.</attendu>
+
 ## Diagnostic
 
 L'hypothèse principale concerne le panier sauvegardé dans le navigateur : `chargerPanier()` relit les anciennes données sans vérifier leur version ni le contenu des lignes. Par exemple, une ligne sans quantité numérique entraîne un calcul invalide dans `prixLigne()`. Cela reste une hypothèse : la capture ne montre pas les données enregistrées de la cliente.
