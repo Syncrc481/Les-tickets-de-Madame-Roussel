@@ -15,6 +15,21 @@ export function chargerPanier() {
   if (!brut) {
     return { lignes: [], codePromo: "" };
   }
-  const donnees = JSON.parse(brut);
-  return { lignes: donnees.lignes || donnees, codePromo: donnees.codePromo || "" };
+  let donnees;
+  try {
+    donnees = JSON.parse(brut);
+  } catch {
+    donnees = null;
+  }
+  if (!donnees || donnees.version !== VERSION || !Array.isArray(donnees.lignes)) {
+    // Conserve les anciennes données avant que le panier v2 ne soit enregistré.
+    let cleArchive = `${CLE}-archive`;
+    let numero = 1;
+    while (localStorage.getItem(cleArchive) !== null) {
+      cleArchive = `${CLE}-archive-${numero++}`;
+    }
+    localStorage.setItem(cleArchive, brut);
+    return { lignes: [], codePromo: "" };
+  }
+  return { lignes: donnees.lignes, codePromo: donnees.codePromo || "" };
 }
